@@ -12,28 +12,29 @@ document.addEventListener("click", (e) => {
     }
 });
 
-const form = document.getElementById('contactForm');
-const status = document.getElementById('status');
+// ===== Suggestions Form Handling =====
+const suggestionForm = document.getElementById('suggestionForm');
+const suggestionStatus = document.getElementById('suggestionStatus');
 
-form.addEventListener('submit', async (e) => {
+suggestionForm.addEventListener('submit', async (e) => {
   e.preventDefault();
-  status.textContent = "Sending...";
+  suggestionStatus.textContent = "Submitting suggestion...";
 
-  const formData = new FormData(form);
+  const formData = new FormData(suggestionForm);
   const data = Object.fromEntries(formData.entries());
 
   try {
-    const res = await fetch('https://gaurav.dapirates.xyz/api/contact', {
+    const res = await fetch('https://gaurav.dapirates.xyz/api/suggestions', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(data)
     });
 
     const result = await res.json();
-    status.textContent = result.message || 'Message sent!';
-    form.reset();
+    suggestionStatus.textContent = result.message || '✅ Suggestion submitted!';
+    suggestionForm.reset();
   } catch (err) {
     console.error(err);
-    status.textContent = "❌ Failed to send message. Please try again.";
+    suggestionStatus.textContent = "❌ Failed to submit suggestion. Please try again.";
   }
 });

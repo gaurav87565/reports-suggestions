@@ -37,7 +37,7 @@ function formatUptime(ms) {
   const minutes = Math.floor(seconds / 60) % 60;
   const hours = Math.floor(seconds / 3600) % 24;
   const days = Math.floor(seconds / 86400) % 30;
-  const months = Math.floor(seconds / 2592000); // 30 days approx
+  const months = Math.floor(seconds / 2592000);
 
   const parts = [];
   if (months > 0) parts.push(`${months} month${months !== 1 ? 's' : ''}`);
@@ -49,31 +49,30 @@ function formatUptime(ms) {
   return parts.join(' ');
 }
 
-// API: Contact form handler
-app.post('/api/contact', async (req, res) => {
-  const { name, email, message } = req.body;
+// API: Suggestions handler
+app.post('/api/suggestions', async (req, res) => {
+  const { name, message } = req.body;
 
-  if (!name || !email || !message) {
-    return res.status(400).json({ error: 'All fields are required.' });
+  if (!name || !message) {
+    return res.status(400).json({ error: 'Name and message are required.' });
   }
 
   try {
     const user = await bot.users.fetch(process.env.OWNER_ID);
     const embed = new EmbedBuilder()
-      .setTitle('📩 New Contact Message')
+      .setTitle('💡 New Suggestion')
       .addFields(
         { name: 'Name', value: name, inline: true },
-        { name: 'Email', value: email, inline: true },
-        { name: 'Message', value: message }
+        { name: 'Suggestion', value: message }
       )
-      .setColor(0x00b0f4)
+      .setColor(0xffd700)
       .setTimestamp();
 
     await user.send({ embeds: [embed] });
-    res.status(200).json({ success: true, message: '✅ Message sent successfully!' });
+    res.status(200).json({ success: true, message: '✅ Suggestion sent successfully!' });
   } catch (error) {
-    console.error('Failed to send contact message:', error);
-    res.status(500).json({ error: 'Failed to send message. Please try again later.' });
+    console.error('Failed to send suggestion:', error);
+    res.status(500).json({ error: 'Failed to send suggestion. Please try again later.' });
   }
 });
 

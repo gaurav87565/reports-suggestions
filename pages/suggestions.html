@@ -3,50 +3,127 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Gaurav | Contact Me</title>
+  <title>Gaurav | Suggestions</title>
   <link rel="stylesheet" href="/css/contact.css" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
 </head>
 <body>
 
-    <nav class="navbar">
-        <a href="/" class="logo">
-          <img src="/assets/logo.png" alt="Logo" class="logo-img" />
-          Gaurav
-        </a>
-        <ul class="nav-links">
-          <li><a href="/"><i class="fas fa-home"></i> Home</a></li>
-          <li><a href="/about"><i class="fas fa-user"></i> About</a></li>
-          <li><a href="/projects"><i class="fas fa-code"></i> Projects</a></li>
-          <li><a href="/blogs"><i class="fas fa-blog"></i> Blogs</a></li>
-          <li><a href="/contact"><i class="fas fa-phone"></i> Contact</a></li>
-        </ul>
-        <div class="hamburger">
-            <i class="fas fa-bars"></i>
-        </div>
-      </nav>
-<nav class="breadcrumb" aria-label="Breadcrumb">
-  <ul>
-    <li><a href="/">Home</a></li>
-    <li aria-current="page">Contact</li>
-  </ul>
-</nav> 
+  <!-- NAVBAR -->
+  <nav class="navbar">
+    <a href="/" class="logo">
+      <img src="/assets/logo.png" alt="Logo" class="logo-img" />
+      Gaurav
+    </a>
+    <ul class="nav-links">
+      <li><a href="/"><i class="fas fa-home"></i> Home</a></li>
+      <li><a href="/about"><i class="fas fa-user"></i> About</a></li>
+      <li><a href="/projects"><i class="fas fa-code"></i> Projects</a></li>
+      <li><a href="/blogs"><i class="fas fa-blog"></i> Blogs</a></li>
+      <li><a href="/suggestions" class="active"><i class="fas fa-lightbulb"></i> Suggestions</a></li>
+    </ul>
+    <div class="hamburger">
+      <i class="fas fa-bars"></i>
+    </div>
+  </nav>
+
+  <!-- Breadcrumb -->
+  <nav class="breadcrumb" aria-label="Breadcrumb">
+    <ul>
+      <li><a href="/">Home</a></li>
+      <li aria-current="page">Suggestions</li>
+    </ul>
+  </nav>
+
+  <!-- MAIN CONTENT -->
   <main class="contact-container">
-    <h1>Contact Me</h1>
+    <h1>Send a Suggestion</h1>
     <div class="contact-wrapper">
-      <form id="contactForm">
+      <form id="suggestionForm">
         <input type="text" name="name" placeholder="Your Name" required />
-        <textarea name="message" rows="5" placeholder="Your Suggestion" required></textarea>
-        <button type="submit">Send</button>
-        <p id="status"></p>
+        <textarea name="suggestion" rows="5" placeholder="Your Suggestion" required></textarea>
+        <button type="submit">Submit</button>
+        <p id="suggestionStatus"></p>
       </form>
     </div>
   </main>
 
-
+  <!-- FOOTER -->
   <footer>
     <p>© Gaurav - 2025</p>
-</footer>
-<script src="/js/contact.js"></script>
+  </footer>
+
+  <!-- JS -->
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+
+      // ===== NAVBAR TOGGLE =====
+      const hamburger = document.querySelector(".hamburger");
+      const navLinks = document.querySelector(".nav-links");
+
+      hamburger.addEventListener("click", (e) => {
+        e.stopPropagation();
+        navLinks.classList.toggle("active");
+      });
+
+      document.addEventListener("click", (e) => {
+        if (!navLinks.contains(e.target) && !hamburger.contains(e.target)) {
+          navLinks.classList.remove("active");
+        }
+      });
+
+      // ===== SUGGESTION FORM =====
+      const suggestionForm = document.getElementById('suggestionForm');
+      const suggestionStatus = document.getElementById('suggestionStatus');
+
+      suggestionForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        suggestionStatus.textContent = "Submitting suggestion...";
+        suggestionStatus.className = "";
+
+        const formData = new FormData(suggestionForm);
+        const data = Object.fromEntries(formData.entries());
+
+        try {
+          const res = await fetch('https://gaurav.dapirates.xyz/api/suggestions', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data)
+          });
+
+          const result = await res.json();
+          if (res.ok) {
+            suggestionStatus.textContent = result.message || '✅ Suggestion submitted!';
+            suggestionStatus.classList.add('success');
+            suggestionForm.reset();
+          } else {
+            suggestionStatus.textContent = result.message || '❌ Failed to submit suggestion.';
+            suggestionStatus.classList.add('error');
+          }
+        } catch (err) {
+          console.error(err);
+          suggestionStatus.textContent = "❌ Failed to submit suggestion. Please try again.";
+          suggestionStatus.classList.add('error');
+        }
+      });
+
+    });
+  </script>
+
+  <style>
+    /* Optional status message styling */
+    #suggestionStatus {
+      margin-top: 10px;
+      font-size: 0.9rem;
+      transition: 0.3s ease;
+    }
+    #suggestionStatus.success {
+      color: green;
+    }
+    #suggestionStatus.error {
+      color: red;
+    }
+  </style>
+
 </body>
 </html>

@@ -1,79 +1,70 @@
-const hamburger = document.querySelector(".hamburger");
-const navLinks = document.querySelector(".nav-links");
+document.addEventListener('DOMContentLoaded', () => {
 
-hamburger.addEventListener("click", (e) => {
-  e.stopPropagation();
-  navLinks.classList.toggle("active");
-});
+  // ===== HAMBURGER MENU =====
+  const hamburger = document.querySelector(".hamburger");
+  const navLinks = document.querySelector(".nav-links");
 
-document.addEventListener("click", (e) => {
-  if (!navLinks.contains(e.target) && !hamburger.contains(e.target)) {
-    navLinks.classList.remove("active");
-  }
-});
+  hamburger.addEventListener("click", (e) => {
+    e.stopPropagation();
+    navLinks.classList.toggle("active");
+  });
 
-document.addEventListener('DOMContentLoaded', function() {
+  document.addEventListener("click", (e) => {
+    if (!navLinks.contains(e.target) && !hamburger.contains(e.target)) {
+      navLinks.classList.remove("active");
+    }
+  });
+
+  // ===== TYPEWRITER EFFECT =====
   const words = ["Web Developer", "Freelancer", "Open Source Contributor", "Bot Developer"];
-  let currentWordIndex = 0;
+  let wordIndex = 0;
   let charIndex = 0;
   let isDeleting = false;
-  let delay = 100;
-
   const element = document.getElementById("typewriter");
 
-  function type() {
-    const currentWord = words[currentWordIndex];
-    let displayedText;
+  const type = () => {
+    const currentWord = words[wordIndex];
+    const text = isDeleting
+      ? currentWord.substring(0, charIndex--)
+      : currentWord.substring(0, charIndex++);
 
-    if (isDeleting) {
-      displayedText = currentWord.substring(0, charIndex);
-      element.textContent = displayedText;
-      if (charIndex > 0) {
-        charIndex--;
-        delay = 80;
-      } else {
-        isDeleting = false;
-        currentWordIndex = (currentWordIndex + 1) % words.length;
-        delay = 500;
-      }
-    } else {
-      displayedText = currentWord.substring(0, charIndex);
-      element.textContent = displayedText;
-      if (charIndex < currentWord.length) {
-        charIndex++;
-        delay = 120;
-      } else {
-        delay = 1500;
-        isDeleting = true;
-      }
+    element.textContent = text;
+
+    let delay = isDeleting ? 80 : 120;
+
+    if (!isDeleting && charIndex === currentWord.length) {
+      delay = 1500;
+      isDeleting = true;
+    } else if (isDeleting && charIndex === 0) {
+      isDeleting = false;
+      wordIndex = (wordIndex + 1) % words.length;
+      delay = 500;
     }
+
     setTimeout(type, delay);
-  }
+  };
 
-  type(); // start typing
+  type();
+
+  // ===== RIPPLE EFFECT FOR SOCIAL BUTTONS =====
+  const socialBtns = document.querySelectorAll('.social-btn');
+
+  socialBtns.forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      const platform = btn.getAttribute('data-platform');
+      console.log(`Clicked on ${platform}`);
+
+      const ripple = document.createElement('span');
+      ripple.classList.add('ripple');
+
+      const rect = btn.getBoundingClientRect();
+      ripple.style.left = `${e.clientX - rect.left}px`;
+      ripple.style.top = `${e.clientY - rect.top}px`;
+
+      btn.appendChild(ripple);
+
+      setTimeout(() => ripple.remove(), 600);
+    });
+  });
+
 });
-
-       // Add ripple effect to social buttons
-       const socialBtns = document.querySelectorAll('.social-btn');
-        
-       socialBtns.forEach(btn => {
-           btn.addEventListener('click', function(e) {
-               const platform = this.getAttribute('data-platform');
-               console.log(`Clicked on ${platform}`);
-               
-               // Create ripple effect
-               const ripple = document.createElement('span');
-               ripple.classList.add('ripple');
-               this.appendChild(ripple);
-               
-               const x = e.clientX - e.target.getBoundingClientRect().left;
-               const y = e.clientY - e.target.getBoundingClientRect().top;
-               
-               ripple.style.left = `${x}px`;
-               ripple.style.top = `${y}px`;
-               
-               setTimeout(() => {
-                   ripple.remove();
-               }, 600);
-           });
-       });
