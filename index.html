@@ -1,83 +1,32 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Gaurav | Portfolio</title>
-  <link rel="stylesheet" href="/css/style.css" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />
+  <title>Form Submission</title>
 </head>
-
 <body>
-  <nav class="navbar">
-    <a href="/" class="logo">
-        <img src="/assets/logo.png" alt="Logo" class="logo-img" />
-        Gaurav
-      </a>
-    <ul class="nav-links">
-      <li><a href="/"><i class="fas fa-home"></i> Home</a></li>
-      <li><a href="/about"><i class="fas fa-user"></i> About</a></li>
-      <li><a href="/projects"><i class="fas fa-code"></i> Projects</a></li>
-      <li><a href="/blogs"><i class="fas fa-blog"></i> Blogs</a></li>
-      <li><a href="/suggestion"><i class="fas fa-phone"></i> Contact</a></li>
-    </ul>
-    <div class="hamburger">
-      <i class="fas fa-bars"></i>
-    </div>
-  </nav>
+  <h2>Submit a Request</h2>
+  <form id="submissionForm">
+    <input type="text" name="username" placeholder="Your Name" required><br><br>
+    <textarea name="message" placeholder="Your Request" required></textarea><br><br>
+    <button type="submit">Submit</button>
+  </form>
 
-  <main class="center">
-    <section class="about-section">
-        <div class="about-container">
-            <div class="about-text">
-                <p style="max-width: 600px; padding: 20px; font-size: 1.1rem;">
-                  <h1>Hey There!! <span class="wave">👋</span></h1>
-                  <h1>I'm Gaurav</h1>
-                  <h1><span id="typewriter"></span><span class="cursor">|</span></h1>
-                </p>
-            </div>
-            <div class="about-pfp">
-                <img src="/assets/pfp.png" alt="Profile Picture" class="pfp-img">
-            </div>
-        </div>
-    </section>
-<br><br><br>
-    <div class="container">
-      <div class="social-container">
-          <div class="social-btn facebook" data-platform="Facebook">
-            <a href="https://www.facebook.com/profile.php?id=61573007326498" target="_blank">
-              <i class="fab fa-facebook-f"></i></a>
-              <span class="text">Facebook</span>
-          </div>
-          <div class="social-btn twitter" data-platform="Twitter">
-            <a href="https://twitter.com/gaurav87565" target="_blank">
-              <i class="fab fa-twitter"></i></a>
-              <span class="text">Twitter</span>
-          </div>
-          <div class="social-btn instagram" data-platform="Instagram">
-            <a href="https://instagram.com/_dapirates" target="_blank">
-              <i class="fab fa-instagram"></i></a>
-              <span class="text">Instagram</span>
-          </div>
-          <div class="social-btn github" data-platform="GitHub">
-            <a href="https://github.com/gaurav87565" target="_blank">
-              <i class="fab fa-github"></i></a>
-              <span class="text">GitHub</span>
-          </div>
-          <div class="social-btn youtube" data-platform="YouTube">
-            <a href="https://youtube.com/@Da_Pirates" target="_blank">
-              <i class="fab fa-youtube"></i></a>
-              <span class="text">YouTube</span>
-          </div>
-      </div>
-  </div>
+  <script>
+    document.getElementById('submissionForm').addEventListener('submit', async function(e) {
+      e.preventDefault();
+      const formData = new FormData(this);
+      const data = {};
+      formData.forEach((value, key) => data[key] = value);
 
-  </main>
+      await fetch('/submit', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+      });
 
-  <footer>
-    <p>© Gaurav - 2025</p>
-  </footer>
-
-  <script src="/js/index.js"></script>
+      alert('Form submitted!');
+      this.reset();
+    });
+  </script>
 </body>
 </html>
