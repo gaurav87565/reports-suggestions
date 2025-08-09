@@ -1,13 +1,13 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Form Submission</title>
+  <title>Reports & Suggestions</title>
 </head>
 <body>
-  <h2>Submit a Request</h2>
+  <h2>Submit a Report / Suggestion</h2>
   <form id="submissionForm">
     <input type="text" name="username" placeholder="Your Name" required><br><br>
-    <textarea name="message" placeholder="Your Request" required></textarea><br><br>
+    <textarea name="message" placeholder="Your Message" required></textarea><br><br>
     <button type="submit">Submit</button>
   </form>
 
@@ -18,14 +18,18 @@
       const data = {};
       formData.forEach((value, key) => data[key] = value);
 
-      await fetch('/submit', {
+      const res = await fetch('/submit', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(data)
       });
 
-      alert('Form submitted!');
-      this.reset();
+      if (res.ok) {
+        alert('✅ Form submitted!');
+        this.reset();
+      } else {
+        alert('❌ Failed to submit. Try again later.');
+      }
     });
   </script>
 </body>
