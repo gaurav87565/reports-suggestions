@@ -2,14 +2,9 @@ require('dotenv').config();
 const express = require('express');
 const path = require('path');
 const { Client, GatewayIntentBits, Partials, EmbedBuilder } = require('discord.js');
-const stats = require('./src/stats-tracker');
 
 const app = express();
 
-// Ensure counters are initialized
-stats.visitCount = stats.visitCount || 0;
-stats.pingCount = stats.pingCount || 0;
-stats.startTime = stats.startTime || Date.now();
 
 // Setup Discord bot
 const bot = new Client({
@@ -92,28 +87,8 @@ app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'index.html'));
 });
 
-app.get('/about', (req, res) => {
-  res.sendFile(path.join(__dirname, 'pages', 'about.html'));
-});
-
-app.get('/projects', (req, res) => {
-  res.sendFile(path.join(__dirname, 'pages', 'projects.html'));
-});
-
-app.get('/blogs', (req, res) => {
-  res.sendFile(path.join(__dirname, 'pages', 'blogs.html'));
-});
-
 app.get('/suggestion', (req, res) => {
   res.sendFile(path.join(__dirname, 'pages', 'suggestions.html'));
-});
-
-app.get('/githubguide', (req, res) => {
-  res.sendFile(path.join(__dirname, 'pages', 'blogs', 'githubguide.html'));
-});
-
-app.get('/vscodeextentions', (req, res) => {
-  res.sendFile(path.join(__dirname, 'pages', 'blogs', 'vscodeextentions.html'));
 });
 
 // 404 fallback
