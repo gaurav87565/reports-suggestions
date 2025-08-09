@@ -5,7 +5,6 @@ const { Client, GatewayIntentBits, Partials, EmbedBuilder } = require('discord.j
 
 const app = express();
 
-
 // Setup Discord bot
 const bot = new Client({
   intents: [GatewayIntentBits.Guilds, GatewayIntentBits.DirectMessages],
@@ -20,13 +19,7 @@ app.use('/js', express.static(path.join(__dirname, 'js')));
 app.use('/assets', express.static(path.join(__dirname, 'assets')));
 app.use(express.static(path.join(__dirname, 'public')));
 
-// Track site visits
-app.use((req, res, next) => {
-  stats.visitCount++;
-  next();
-});
-
-// Format uptime function
+// Format uptime function (optional, but left here if you ever re-add stats)
 function formatUptime(ms) {
   const seconds = Math.floor(ms / 1000);
   const minutes = Math.floor(seconds / 60) % 60;
@@ -71,17 +64,6 @@ app.post('/api/suggestions', async (req, res) => {
   }
 });
 
-// API: Website stats
-app.get('/api/stats', (req, res) => {
-  stats.pingCount++;
-  const uptime = formatUptime(Date.now() - stats.startTime);
-  res.json({
-    uptime,
-    visits: stats.visitCount,
-    pings: stats.pingCount
-  });
-});
-
 // Page routes
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'index.html'));
@@ -107,8 +89,8 @@ bot.once('ready', async () => {
   try {
     await bot.application.commands.set([
       {
-        name: 'stats',
-        description: 'Get website stats',
+        name: 'ping',
+        description: 'Check if bot is alive',
       }
     ]);
     console.log('✅ Slash commands registered');
@@ -122,19 +104,8 @@ bot.on('interactionCreate', async (interaction) => {
   if (!interaction.isCommand()) return;
 
   const { commandName } = interaction;
-  if (commandName === 'stats') {
-    const uptime = formatUptime(Date.now() - stats.startTime);
-    const embed = new EmbedBuilder()
-      .setTitle('📊 Website Stats')
-      .addFields(
-        { name: 'Uptime', value: uptime },
-        { name: 'Visits', value: `${stats.visitCount}` },
-        { name: 'Pings', value: `${stats.pingCount}` }
-      )
-      .setColor(0x00b0f4)
-      .setTimestamp();
-
-    await interaction.reply({ embeds: [embed] });
+  if (commandName === 'ping') {
+    await interaction.reply({ content: `🏓 Pong! Uptime: ${formatUptime(process.uptime() * 1000)}` });
   }
 });
 
