@@ -105,8 +105,8 @@ app.get('/blogs', (req, res) => {
   res.sendFile(path.join(__dirname, 'pages', 'blogs.html'));
 });
 
-app.get('/contact', (req, res) => {
-  res.sendFile(path.join(__dirname, 'pages', 'contact.html'));
+app.get('/suggestion', (req, res) => {
+  res.sendFile(path.join(__dirname, 'pages', 'suggestions.html'));
 });
 
 app.get('/githubguide', (req, res) => {
