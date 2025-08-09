@@ -1,0 +1,24 @@
+{
+  "name": "reports-suggestions",
+  "version": "1.0.0",
+  "description": "A website and Discord bot that lets users submit a form which sends an embed with ✅ and ❌ reactions to a channel.",
+  "main": "server.js",
+  "type": "module",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "nodemon server.js"
+  },
+  "dependencies": {
+    "discord.js": "^14.15.3",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.0"
+  },
+  "engines": {
+    "node": ">=18.x"
+  },
+  "author": "Gaurav Uchil",
+  "license": "MIT"
+}
