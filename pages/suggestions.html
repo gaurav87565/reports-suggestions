@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Gaurav | Contact Me</title>
+  <link rel="stylesheet" href="/css/contact.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+</head>
+<body>
+
+    <nav class="navbar">
+        <a href="/" class="logo">
+          <img src="/assets/logo.png" alt="Logo" class="logo-img" />
+          Gaurav
+        </a>
+        <ul class="nav-links">
+          <li><a href="/"><i class="fas fa-home"></i> Home</a></li>
+          <li><a href="/about"><i class="fas fa-user"></i> About</a></li>
+          <li><a href="/projects"><i class="fas fa-code"></i> Projects</a></li>
+          <li><a href="/blogs"><i class="fas fa-blog"></i> Blogs</a></li>
+          <li><a href="/contact"><i class="fas fa-phone"></i> Contact</a></li>
+        </ul>
+        <div class="hamburger">
+            <i class="fas fa-bars"></i>
+        </div>
+      </nav>
+<nav class="breadcrumb" aria-label="Breadcrumb">
+  <ul>
+    <li><a href="/">Home</a></li>
+    <li aria-current="page">Contact</li>
+  </ul>
+</nav> 
+  <main class="contact-container">
+    <h1>Contact Me</h1>
+    <div class="contact-wrapper">
+      <form id="contactForm">
+        <input type="text" name="name" placeholder="Your Name" required />
+        <textarea name="message" rows="5" placeholder="Your Suggestion" required></textarea>
+        <button type="submit">Send</button>
+        <p id="status"></p>
+      </form>
+    </div>
+  </main>
+
+
+  <footer>
+    <p>© Gaurav - 2025</p>
+</footer>
+<script src="/js/contact.js"></script>
+</body>
+</html>
