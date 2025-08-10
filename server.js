@@ -75,7 +75,7 @@ app.post('/submits', async (req, res) => {
   }
 
   try {
-    const channel = await bot.channels.fetch(process.env.CHANNEL_ID);
+    const channel = await bot.channels.fetch(process.env.CHANNEL_ID2);
     if (!channel) return res.status(404).send('Channel not found');
 
     const embed = new EmbedBuilder()
