@@ -228,7 +228,7 @@
       formData.forEach((value, key) => data[key] = value);
 
       try {
-        const res = await fetch('/submit', { // 🔹 Make sure this matches your backend route
+        const res = await fetch('/submits', { // 🔹 Make sure this matches your backend route
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(data)
