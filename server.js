@@ -38,10 +38,10 @@ app.post('/submit', async (req, res) => {
     if (!channel) return res.status(404).send('Channel not found');
 
     const embed = new EmbedBuilder()
-      .setTitle('📩 New Submission')
+      .setTitle('📩 New Suggestion')
       .addFields(
         { name: 'Username', value: username, inline: true },
-        { name: 'Message', value: message }
+        { name: 'Suggestion', value: message }
       )
       .setColor(0x00ff00)
       .setTimestamp();
@@ -50,13 +50,40 @@ app.post('/submit', async (req, res) => {
     await sentMessage.react('✅');
     await sentMessage.react('❌');
 
-    res.status(200).send('Form submitted to Discord!');
+    res.status(200).send('Suggestion submitted to Discord!');
   } catch (error) {
     console.error(error);
-    res.status(500).send('Error submitting form');
+    res.status(500).send('Error submitting suggestion');
   }
 });
 
+// Handle form submission
+app.post('/submits', async (req, res) => {
+  const { username, message } = req.body;
+
+  try {
+    const channel = await bot.channels.fetch(process.env.CHANNEL_ID);
+    if (!channel) return res.status(404).send('Channel not found');
+
+    const embed = new EmbedBuilder()
+      .setTitle('📩 New Report')
+      .addFields(
+        { name: 'Username', value: username, inline: true },
+        { name: 'Report', value: message }
+      )
+      .setColor(0x00ff00)
+      .setTimestamp();
+
+    const sentMessage = await channel.send({ embeds: [embed] });
+    await sentMessage.react('✅');
+    await sentMessage.react('❌');
+
+    res.status(200).send('Report submitted to Discord!');
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Error submitting Report');
+  }
+});
 app.listen(3000, () => console.log('🌐 Website running on port 3000'));
 
 bot.login(process.env.TOKEN);
