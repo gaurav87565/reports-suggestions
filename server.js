@@ -11,8 +11,12 @@ const __dirname = path.dirname(__filename);
 
 const app = express();
 app.use(express.json());
+app.use(express.urlencoded({ extended: true })); // ✅ Needed for form data
 
-// Serve index.html
+// Serve static HTML
+app.use(express.static(__dirname)); // Serve all HTML files from root
+
+// Routes for HTML pages
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'index.html'));
 });
@@ -21,6 +25,7 @@ app.get('/report', (req, res) => {
   res.sendFile(path.join(__dirname, 'report.html'));
 });
 
+// Discord bot setup
 const bot = new Client({
   intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages]
 });
@@ -29,9 +34,13 @@ bot.once('ready', () => {
   console.log(`✅ Logged in as ${bot.user.tag}`);
 });
 
-// Handle form submission
+// Suggestion submission
 app.post('/submit', async (req, res) => {
   const { username, message } = req.body;
+
+  if (!username || !message) {
+    return res.status(400).send('Missing username or message');
+  }
 
   try {
     const channel = await bot.channels.fetch(process.env.CHANNEL_ID);
@@ -50,16 +59,20 @@ app.post('/submit', async (req, res) => {
     await sentMessage.react('✅');
     await sentMessage.react('❌');
 
-    res.status(200).send('Suggestion submitted to Discord!');
+    res.status(200).json({ success: true, message: 'Suggestion submitted to Discord!' });
   } catch (error) {
     console.error(error);
-    res.status(500).send('Error submitting suggestion');
+    res.status(500).json({ success: false, message: 'Error submitting suggestion' });
   }
 });
 
-// Handle form submission
+// Report submission
 app.post('/submits', async (req, res) => {
   const { username, message } = req.body;
+
+  if (!username || !message) {
+    return res.status(400).send('Missing username or message');
+  }
 
   try {
     const channel = await bot.channels.fetch(process.env.CHANNEL_ID);
@@ -71,19 +84,21 @@ app.post('/submits', async (req, res) => {
         { name: 'Username', value: username, inline: true },
         { name: 'Report', value: message }
       )
-      .setColor(0x00ff00)
+      .setColor(0xff0000)
       .setTimestamp();
 
     const sentMessage = await channel.send({ embeds: [embed] });
     await sentMessage.react('✅');
     await sentMessage.react('❌');
 
-    res.status(200).send('Report submitted to Discord!');
+    res.status(200).json({ success: true, message: 'Report submitted to Discord!' });
   } catch (error) {
     console.error(error);
-    res.status(500).send('Error submitting Report');
+    res.status(500).json({ success: false, message: 'Error submitting report' });
   }
 });
-app.listen(3000, () => console.log('🌐 Website running on port 3000'));
+
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => console.log(`🌐 Website running on port ${PORT}`));
 
 bot.login(process.env.TOKEN);

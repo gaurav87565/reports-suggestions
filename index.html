@@ -6,37 +6,54 @@
   <title>Suggestions</title>
   <style>
     body {
-      font-family: Arial, sans-serif;
-      background: #121212;
+      font-family: "Segoe UI", Arial, sans-serif;
+      background: #2c2f33;
       color: white;
       display: flex;
       justify-content: center;
       align-items: center;
       height: 100vh;
+      margin: 0;
     }
     form {
-      background: #1e1e1e;
+      background: #23272a;
       padding: 20px;
-      border-radius: 10px;
-      width: 300px;
+      border-radius: 8px;
+      width: 320px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    }
+    h2 {
+      color: #ffffff;
+      font-size: 20px;
+      margin-bottom: 15px;
+      text-align: center;
     }
     input, textarea, button {
-      padding: 2px;
+      padding: 10px;
       margin-top: 10px;
-      width: 100%;
+      width: 94%;
       border: none;
       border-radius: 5px;
-      font-size: 18px;
+      font-size: 16px;
+    }
+    input, textarea {
+      background: #2c2f33;
+      color: white;
+      border: 1px solid #99aab5;
     }
     textarea {
       resize: none;
       height: 80px;
     }
     button {
-      background: #4CAF50;
+      background: #5865F2;
       color: white;
       cursor: pointer;
       font-weight: bold;
+      transition: background 0.2s;
+    }
+    button:hover {
+      background: #4752c4;
     }
     /* Custom prompt styles */
     .overlay {
@@ -56,15 +73,20 @@
       opacity: 1;
     }
     .prompt {
-      background: #222;
+      background: #23272a;
       padding: 20px;
       border-radius: 10px;
       text-align: center;
-      width: 250px;
+      width: 280px;
+      border: 1px solid #99aab5;
+    }
+    .prompt h3 {
+      color: #57F287;
+      margin-bottom: 8px;
     }
     .prompt button {
       margin-top: 15px;
-      background: #ff4444;
+      background: #ed4245;
       font-weight: bold;
     }
   </style>
@@ -72,7 +94,7 @@
 <body>
   <form id="myForm">
     <h2>Submit Suggestion</h2>
-    <input type="text" name="name" placeholder="Your Name" required />
+    <input type="text" name="username" placeholder="Your Name" required />
     <textarea name="message" placeholder="Your Message" required></textarea>
     <button type="submit">Submit</button>
   </form>
@@ -81,7 +103,7 @@
   <div class="overlay" id="customPrompt">
     <div class="prompt">
       <h3>✅ Suggestion Submitted!</h3>
-      <p>Your Suggestion has been recorded.</p>
+      <p>Your suggestion has been sent to the server.</p>
       <button id="closePrompt">Close</button>
     </div>
   </div>
@@ -94,23 +116,25 @@
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
 
-      // Collect form data
       const formData = new FormData(form);
       const data = {};
       formData.forEach((value, key) => data[key] = value);
 
-      // Send to backend (adjust /submit route if needed)
-      const res = await fetch('/submit', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(data)
-      });
+      try {
+        const res = await fetch('/submit', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(data)
+        });
 
-      if (res.ok) {
-        overlay.classList.add('active');
-        form.reset();
-      } else {
-        alert('❌ Failed to submit. Please try again.');
+        if (res.ok) {
+          overlay.classList.add('active');
+          form.reset();
+        } else {
+          alert('❌ Failed to submit. Please try again.');
+        }
+      } catch (err) {
+        alert('⚠️ Network error.');
       }
     });
 
