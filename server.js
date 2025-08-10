@@ -17,7 +17,7 @@ app.use(express.urlencoded({ extended: true })); // ✅ Needed for form data
 app.use(express.static(__dirname)); // Serve all HTML files from root
 
 // Routes for HTML pages
-app.get('/', (req, res) => {
+app.get('/suggestions', (req, res) => {
   res.sendFile(path.join(__dirname, 'index.html'));
 });
 

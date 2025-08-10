@@ -12,7 +12,8 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      height: 100vh;
+      flex-direction: column;
+      min-height: 100vh;
       margin: 0;
     }
     form {
@@ -21,6 +22,7 @@
       border-radius: 8px;
       width: 320px;
       box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+      margin-top: 80px; /* space for navbar */
     }
     h2 {
       color: #ffffff;
@@ -33,7 +35,7 @@
       margin-top: 10px;
       width: 94%;
       border: none;
-      border-radius: 5px;
+      border-radius: 2px;
       font-size: 16px;
     }
     input, textarea {
@@ -89,9 +91,89 @@
       background: #ed4245;
       font-weight: bold;
     }
+    /* Navbar styling */
+    nav {
+      background-color: #222;
+      color: white;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 20px;
+      width: 100%;
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: 1000;
+    }
+    nav .logo {
+      font-size: 1.2rem;
+      font-weight: bold;
+    }
+    nav ul {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      gap: 15px;
+    }
+    nav ul li a {
+      color: white;
+      text-decoration: none;
+      padding: 8px;
+      transition: 0.3s;
+    }
+    nav ul li a:hover {
+      background-color: #444;
+      border-radius: 4px;
+    }
+    /* Mobile hamburger menu */
+    .menu-toggle {
+      display: none;
+      flex-direction: column;
+      cursor: pointer;
+    }
+    .menu-toggle span {
+      height: 3px;
+      width: 25px;
+      background: white;
+      margin: 4px 0;
+      border-radius: 2px;
+    }
+    @media (max-width: 768px) {
+      nav ul {
+        display: none;
+        flex-direction: column;
+        width: 100%;
+        background-color: #222;
+        position: absolute;
+        top: 50px;
+        left: 0;
+        padding: 10px 0;
+      }
+      nav ul.active {
+        display: flex;
+      }
+      .menu-toggle {
+        display: flex;
+      }
+    }
   </style>
 </head>
 <body>
+  <nav>
+    <div class="logo">DaPirates</div>
+    <div class="menu-toggle" onclick="toggleMenu()">
+      <span></span>
+      <span></span>
+      <span></span>
+    </div>
+    <ul id="menu">
+      <li><a href="https://dapirates.xyz">Home</a></li>
+      <li><a href="suggestions.html">Suggestions</a></li>
+      <li><a href="report.html">Report</a></li>
+    </ul>
+  </nav>
+
   <form id="myForm">
     <h2>Submit Suggestion</h2>
     <input type="text" name="username" placeholder="Your Name" required />
@@ -115,18 +197,15 @@
 
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
-
       const formData = new FormData(form);
       const data = {};
       formData.forEach((value, key) => data[key] = value);
-
       try {
         const res = await fetch('/submit', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(data)
         });
-
         if (res.ok) {
           overlay.classList.add('active');
           form.reset();
@@ -141,6 +220,10 @@
     closeBtn.addEventListener('click', () => {
       overlay.classList.remove('active');
     });
+
+    function toggleMenu() {
+      document.getElementById("menu").classList.toggle("active");
+    }
   </script>
 </body>
 </html>
