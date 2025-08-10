@@ -9,27 +9,108 @@
       font-family: "Segoe UI", Arial, sans-serif;
       background: #2c2f33;
       color: white;
+      margin: 0;
+      padding: 0;
+    }
+
+    /* Navbar styling */
+    nav {
+      background-color: #222;
+      color: white;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 20px;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+
+    nav .logo {
+      font-size: 1.2rem;
+      font-weight: bold;
+    }
+
+    nav ul {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      gap: 15px;
+    }
+
+    nav ul li a {
+      color: white;
+      text-decoration: none;
+      padding: 8px;
+      transition: 0.3s;
+    }
+
+    nav ul li a:hover {
+      background-color: #444;
+      border-radius: 4px;
+    }
+
+    /* Mobile hamburger menu */
+    .menu-toggle {
+      display: none;
+      flex-direction: column;
+      cursor: pointer;
+    }
+
+    .menu-toggle span {
+      height: 3px;
+      width: 25px;
+      background: white;
+      margin: 4px 0;
+      border-radius: 2px;
+    }
+
+    @media (max-width: 768px) {
+      nav ul {
+        display: none;
+        flex-direction: column;
+        width: 100%;
+        background-color: #222;
+        position: absolute;
+        top: 50px;
+        left: 0;
+        padding: 10px 0;
+      }
+
+      nav ul.active {
+        display: flex;
+      }
+
+      .menu-toggle {
+        display: flex;
+      }
+    }
+
+    /* Form container */
+    .container {
       display: flex;
       justify-content: center;
       align-items: center;
-      flex-direction: column;
-      min-height: 100vh;
-      margin: 0;
+      padding: 20px;
+      min-height: calc(100vh - 60px);
     }
+
     form {
       background: #23272a;
       padding: 20px;
       border-radius: 8px;
-      width: 320px;
+      width: 100%;
+      max-width: 350px;
       box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-      margin-top: 80px; /* space for navbar */
     }
+
     h2 {
-      color: #ffffff;
-      font-size: 20px;
-      margin-bottom: 15px;
       text-align: center;
+      margin-bottom: 15px;
+      font-size: 20px;
     }
+
     input, textarea, button {
       padding: 10px;
       margin-top: 10px;
@@ -38,15 +119,18 @@
       border-radius: 2px;
       font-size: 16px;
     }
+
     input, textarea {
       background: #2c2f33;
       color: white;
       border: 1px solid #99aab5;
     }
+
     textarea {
       resize: none;
       height: 80px;
     }
+
     button {
       background: #5865F2;
       color: white;
@@ -54,10 +138,12 @@
       font-weight: bold;
       transition: background 0.2s;
     }
+
     button:hover {
       background: #4752c4;
     }
-    /* Custom prompt styles */
+
+    /* Custom prompt */
     .overlay {
       position: fixed;
       top: 0; left: 0;
@@ -70,10 +156,12 @@
       opacity: 0;
       transition: opacity 0.3s ease, visibility 0.3s ease;
     }
+
     .overlay.active {
       visibility: visible;
       opacity: 1;
     }
+
     .prompt {
       background: #23272a;
       padding: 20px;
@@ -82,84 +170,21 @@
       width: 280px;
       border: 1px solid #99aab5;
     }
+
     .prompt h3 {
       color: #57F287;
       margin-bottom: 8px;
     }
+
     .prompt button {
       margin-top: 15px;
       background: #ed4245;
       font-weight: bold;
     }
-    /* Navbar styling */
-    nav {
-      background-color: #222;
-      color: white;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 10px 20px;
-      width: 100%;
-      position: fixed;
-      top: 0;
-      left: 0;
-      z-index: 1000;
-    }
-    nav .logo {
-      font-size: 1.2rem;
-      font-weight: bold;
-    }
-    nav ul {
-      list-style: none;
-      margin: 0;
-      padding: 0;
-      display: flex;
-      gap: 15px;
-    }
-    nav ul li a {
-      color: white;
-      text-decoration: none;
-      padding: 8px;
-      transition: 0.3s;
-    }
-    nav ul li a:hover {
-      background-color: #444;
-      border-radius: 4px;
-    }
-    /* Mobile hamburger menu */
-    .menu-toggle {
-      display: none;
-      flex-direction: column;
-      cursor: pointer;
-    }
-    .menu-toggle span {
-      height: 3px;
-      width: 25px;
-      background: white;
-      margin: 4px 0;
-      border-radius: 2px;
-    }
-    @media (max-width: 768px) {
-      nav ul {
-        display: none;
-        flex-direction: column;
-        width: 100%;
-        background-color: #222;
-        position: absolute;
-        top: 50px;
-        left: 0;
-        padding: 10px 0;
-      }
-      nav ul.active {
-        display: flex;
-      }
-      .menu-toggle {
-        display: flex;
-      }
-    }
   </style>
 </head>
 <body>
+
   <nav>
     <div class="logo">DaPirates</div>
     <div class="menu-toggle" onclick="toggleMenu()">
@@ -169,19 +194,20 @@
     </div>
     <ul id="menu">
       <li><a href="https://dapirates.xyz">Home</a></li>
-      <li><a href="suggestions.html">Suggestions</a></li>
-      <li><a href="report.html">Report</a></li>
+      <li><a href="/suggestions">Suggestions</a></li>
+      <li><a href="/report">Report</a></li>
     </ul>
   </nav>
 
-  <form id="myForm">
-    <h2>Submit Suggestion</h2>
-    <input type="text" name="username" placeholder="Your Name" required />
-    <textarea name="message" placeholder="Your Message" required></textarea>
-    <button type="submit">Submit</button>
-  </form>
+  <div class="container">
+    <form id="myForm">
+      <h2>Submit Suggestion</h2>
+      <input type="text" name="username" placeholder="Your Name" required />
+      <textarea name="message" placeholder="Your Message" required></textarea>
+      <button type="submit">Submit</button>
+    </form>
+  </div>
 
-  <!-- Custom prompt -->
   <div class="overlay" id="customPrompt">
     <div class="prompt">
       <h3>✅ Suggestion Submitted!</h3>
@@ -200,19 +226,21 @@
       const formData = new FormData(form);
       const data = {};
       formData.forEach((value, key) => data[key] = value);
+
       try {
         const res = await fetch('/submit', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(data)
         });
+
         if (res.ok) {
           overlay.classList.add('active');
           form.reset();
         } else {
           alert('❌ Failed to submit. Please try again.');
         }
-      } catch (err) {
+      } catch {
         alert('⚠️ Network error.');
       }
     });
@@ -225,5 +253,6 @@
       document.getElementById("menu").classList.toggle("active");
     }
   </script>
+
 </body>
 </html>
